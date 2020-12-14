@@ -1,5 +1,5 @@
 {
-  "name": "stripes-vendor-dll",
+  "name": "@folio/stripes-vendor-dll",
   "version": "1.0.0",
   "description": "Stripes Vendor Dll",
   "main": "output/stripesVendor.js",
