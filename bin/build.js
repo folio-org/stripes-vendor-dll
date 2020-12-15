@@ -7,7 +7,7 @@ const { readdirSync } = require('fs');
 // stripes-core pollutes dependencies with items which should
 // belong to devDependencies so until that's cleaned up
 // remove them.
-const blockList = [
+const excluded = [
   '@babel',
   '@bigtest',
   '@folio',
@@ -44,24 +44,27 @@ const blockList = [
   'webpack'
 ].join('|');
 
-const blockRegex = new RegExp(`^(?!${blockList}.*$).*`, 'g');
-
 const getDirectories = source => {
   return readdirSync(source, { withFileTypes: true })
     .filter(dirent => dirent.isDirectory())
     .map(dirent => dirent.name);
 }
 
-const readDependencies = (dir, exclude) => {
+const readDependencies = (dir, excluded) => {
   const package = require(`${dir}/package.json`);
   const { dependencies } = package;
   let deps = [];
+  let excludeRegex;
+
+  if (excluded) {
+    excludeRegex = new RegExp(`^(?!${excluded}.*$).*`, 'g');
+  }
 
   if (dependencies) {
     deps = Object.keys(dependencies);
 
-    if (exclude) {
-      deps = deps.filter(dep => dep.match(exclude));
+    if (excluded) {
+      deps = deps.filter(dep => dep.match(excludeRegex));
     }
   }
 
@@ -73,12 +76,13 @@ const buildDependencyList = () => {
   const dirs = getDirectories('./node_modules/@folio');
 
   dirs.forEach((dir) => {
-    const blockList = (dir !== 'stripes') ? blockRegex : '';
-    const deps = readDependencies(`${process.cwd()}/node_modules/@folio/${dir}`, blockList);
+    const exclude = (dir !== 'stripes') ? excluded : '';
+    const deps = readDependencies(`${process.cwd()}/node_modules/@folio/${dir}`, exclude);
+
     allDeps.push(...deps);
   });
 
-  const deps = readDependencies(process.cwd());
+  const deps = readDependencies(process.cwd(), '@folio/stripes');
   allDeps.push(...deps);
 
   return [... new Set(allDeps)].sort();
