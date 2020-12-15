@@ -2,7 +2,7 @@
   "name": "@folio/stripes-vendor-dll",
   "version": "1.0.0",
   "description": "Stripes Vendor Dll",
-  "main": "output/stripesVendor.js",
+  "main": "output/stripesVendorDll.js",
   "publishConfig": {
     "registry": "https://repository.folio.org/repository/npm-folio/"
   },
