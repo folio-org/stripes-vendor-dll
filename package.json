@@ -12,7 +12,7 @@
   },
   "scripts": {
     "build": "node ./bin/build.js",
-    "postinstall": "yarn build"
+    "prepublish": "yarn build"
   },
   "dependencies": {
     "@folio/stripes": "^6.0.0",
