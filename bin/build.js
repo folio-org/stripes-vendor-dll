@@ -97,7 +97,6 @@ try {
   execSync(cmd);
 
   // cleanup
-  execSync('mv -f ./output/stripesVendorDll.*.js ./output/stripesVendorDll.js');
   execSync('rm -f ./output/chunk*.js');
   execSync('rm -f ./output/style.*.css');
   execSync('rm -f ./output/index.html');
