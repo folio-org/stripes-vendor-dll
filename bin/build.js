@@ -12,9 +12,12 @@ const excluded = [
   '@bigtest',
   '@folio',
   '@hot-loader',
+  '@jest',
+  'add-asset-html-webpack-plugin',
   'awesome-typescript-loader',
   'babel',
   'babel-loader',
+  'babel-jest',
   'commander',
   'css-loader',
   'debug',
@@ -25,6 +28,8 @@ const excluded = [
   'handlebars-loader',
   'hard-source-webpack-plugin',
   'html-webpack-plugin',
+  'jest',
+  'jest-junit',
   'lodash-webpack-plugin',
   'mini-css-extract-plugin',
   'miragejs',
@@ -36,12 +41,15 @@ const excluded = [
   'rimraf',
   'rtl-detect',
   'rxjs-compat',
+  'semver',
   'serialize-javascript',
   'style-loader',
   'svgo',
   'svgo-loader',
   'typescript',
-  'webpack'
+  'webpack',
+  'stripes-config',
+  'stripes-config.js',
 ].join('|');
 
 const getDirectories = source => {
@@ -50,6 +58,8 @@ const getDirectories = source => {
     .map(dirent => dirent.name);
 }
 
+// loop through package.json files in node_modules/@folio
+// and gather all depedendencies
 const readDependencies = (dir, excluded) => {
   const package = require(`${dir}/package.json`);
   const { dependencies } = package;
@@ -62,6 +72,7 @@ const readDependencies = (dir, excluded) => {
 
   if (dependencies) {
     deps = Object.keys(dependencies);
+
 
     if (excluded) {
       deps = deps.filter(dep => dep.match(excludeRegex));
@@ -76,13 +87,15 @@ const buildDependencyList = () => {
   const dirs = getDirectories('./node_modules/@folio');
 
   dirs.forEach((dir) => {
-    const exclude = (dir !== 'stripes') ? excluded : '';
+    const exclude = (dir !== 'stripes') ? excluded : '@folio/stripes-core|@folio/stripes-final-form|@folio/stripes-form|@folio/stripes-smart-components';
     const deps = readDependencies(`${process.cwd()}/node_modules/@folio/${dir}`, exclude);
 
     allDeps.push(...deps);
   });
 
   const deps = readDependencies(process.cwd(), '@folio/stripes');
+
+  console.log(deps);
   allDeps.push(...deps);
 
   return [... new Set(allDeps)].sort();
@@ -94,8 +107,8 @@ const cmd = `stripes build --createDll ${deps} --dllName stripesVendorDll`;
 try {
   console.log(cmd);
 
+  execSync('rm -rf ./output');
   execSync(cmd);
-
   // cleanup
   execSync('rm -f ./output/chunk*.js');
   execSync('rm -f ./output/style.*.css');
