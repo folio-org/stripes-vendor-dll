@@ -48,8 +48,19 @@ const excluded = [
   'svgo-loader',
   'typescript',
   'webpack',
-  'stripes-config',
-  'stripes-config.js',
+].join('|');
+
+// Exclude stripes-core and all libs which currently consume stripes-core or stripes-config.js
+// The stripes-config.js is currently created via stripes-core as a virtual module.
+// DLL which includes stripes-core will also include stripes-config.js.
+// This creates an issue when buidling via `stripes build` with a custom stripes config.
+// The default config included in DLL will be always used so for now we are excluding it
+// from DLL.
+const stripesExcluded = [
+  '@folio/stripes-core',
+  '@folio/stripes-final-form',
+  '@folio/stripes-form',
+  '@folio/stripes-smart-components',
 ].join('|');
 
 const getDirectories = source => {
@@ -87,7 +98,7 @@ const buildDependencyList = () => {
   const dirs = getDirectories('./node_modules/@folio');
 
   dirs.forEach((dir) => {
-    const exclude = (dir !== 'stripes') ? excluded : '@folio/stripes-core|@folio/stripes-final-form|@folio/stripes-form|@folio/stripes-smart-components';
+    const exclude = (dir === 'stripes') ? stripesExcluded : excluded;
     const deps = readDependencies(`${process.cwd()}/node_modules/@folio/${dir}`, exclude);
 
     allDeps.push(...deps);
@@ -95,7 +106,6 @@ const buildDependencyList = () => {
 
   const deps = readDependencies(process.cwd(), '@folio/stripes');
 
-  console.log(deps);
   allDeps.push(...deps);
 
   return [... new Set(allDeps)].sort();
