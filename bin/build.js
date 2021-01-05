@@ -95,7 +95,7 @@ const readDependencies = (dir, excluded) => {
 
 const buildDependencyList = () => {
   const allDeps = [];
-  const dirs = getDirectories('./node_modules/@folio');
+  const dirs = getDirectories(`${process.cwd()}/node_modules/@folio`);
 
   dirs.forEach((dir) => {
     const exclude = (dir === 'stripes') ? stripesExcluded : excluded;
