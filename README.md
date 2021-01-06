@@ -14,7 +14,7 @@ Stripes Vendor Dll is a tool which can be used to create a [DLL bundle](https://
 
 There are two way to consume it:
 
-* Add `@folio/stripes-vendor-dll` to `package.json` in the ui module / platform you want to build:
+* Add `@folio/stripes-vendor-dll` to `package.json` (under `devDependencies` or `dependencies` if `NODE_ENV=production` is used) in the ui module / platform you want to build:
 
   ````
   "@folio/stripes-vendor-dll": "1.0.0"
