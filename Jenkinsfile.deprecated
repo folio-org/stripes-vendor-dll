@@ -1,0 +1,9 @@
+@Library ('folio_jenkins_shared_libs') _
+
+buildNPM {
+  publishModDescriptor = false
+  runLint = false
+  runRegression = false
+  runSonarqube = false
+  runTest = false
+}
