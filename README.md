@@ -6,6 +6,10 @@ This software is distributed under the terms of the Apache License,
 Version 2.0. See the file "[LICENSE](LICENSE)" for more information.
 
 
+## DEPRECATED
+
+All the DLL work was folded directly into [stripes-cli](https://github.com/folio-org/stripes-cli).
+
 ## Introduction
 
 Stripes Vendor Dll is a tool which can be used to create a [DLL bundle](https://webpack.js.org/plugins/dll-plugin/). The bundle currently includes all 3rd party dependencies (react, moment, etc) found in [stripes](https://github.com/folio-org/stripes/blob/master/package.json) plus couple additional stripes dependencies (stripes-components, stripes-connect,stripes-logger,stripes-util).

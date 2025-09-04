@@ -15,7 +15,7 @@
     "prepublish": "yarn install --ignore-scripts && yarn build"
   },
   "dependencies": {
-    "@folio/stripes": "^6.0.0",
+    "@folio/stripes": "^10.0.0",
     "moment": "~2.29.0",
     "react": "~16.13.1",
     "react-dom": "~16.13.1",
